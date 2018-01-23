@@ -45,7 +45,7 @@ public class Game extends Application {
 			text.setStroke(Color.BLACK);
 			text.setStrokeWidth(2.5);
 			text.setVisible(false);
-			rect.setFill(Color.GREEN);
+			rect.setFill(Color.CORNFLOWERBLUE);
 			rect.setStroke(Color.BLACK);
 			rect.setStrokeWidth(2.5);
 
@@ -71,7 +71,7 @@ public class Game extends Application {
 				return;
 			}
 			if (isX) {
-				text.setText("X");
+				text.setText("X"); //if it's X's turn, set an X, else set a O.
 				text.setVisible(true);
 				isOpen = true;
 			} else {
@@ -99,7 +99,7 @@ public class Game extends Application {
 			int isClosedCounter = 0;
 			for (int x = 0; x < 3; x++) {
 				for (int y = 0; y < 3; y++) {
-					if (board[x][y].text.getText() == "") {
+					if (board[x][y].text.getText() == "") { //checks if there is a tile unopened
 						isClosedCounter++;
 					}
 				}
@@ -134,6 +134,12 @@ public class Game extends Application {
 
 			int openedX = x;
 			int openedY = y;
+			
+			/*
+			* This would be very tedious without find and replace. It gets the exact coordinate of the 
+			* opened tile, and reduces potential combinations of winning moves. Therefore, it doesn't
+			* need to iterate over the board for every move.
+			*/
 
 			if (isX) {
 
@@ -493,14 +499,7 @@ public class Game extends Application {
 
 	Parent fillBoard() {
 		isOver = false;
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
-				Tile tile = new Tile(x, y);
-				board[x][y] = tile;
-				board[x][y].text.setText(null);
-				isX = true;
-			}
-		}
+		isX = true;
 		
 		Pane root = new Pane();
 		root.setPrefSize(width, height+100);
@@ -516,13 +515,15 @@ public class Game extends Application {
 		winText.setVisible(true);
 		winText.setTranslateX(width/2.0-50);
 		winText.setTranslateY(height+60);
-		win.	setOnMouseClicked(e -> restartGame());
+		win.setOnMouseClicked(e -> restartGame());
 		
 		root.getChildren().addAll(win, winText);
+		
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
 				Tile tile = new Tile(x, y);
 				board[x][y] = tile;
+				board[x][y].text.setText(null); //clears the board text, and places the tiles
 				root.getChildren().add(tile);
 			}
 		}
