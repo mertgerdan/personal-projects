@@ -10,7 +10,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class Detector {
 
 	public static List<String> totalWords = new ArrayList<String>();
@@ -29,17 +28,13 @@ public class Detector {
 	public static double engUSWordCount = 155000000000.0; // 155 billion
 	public static double theWordCount = 16977752813.0; // 16.9 billion
 
-	public static double mult = 9.17;
-
 	public static void main(String[] args) {
 
 		if (args.length > 2) {
 			System.out.println("Too many arguments!");
 		}
-		// fileName1 = args[0];
-		// fileName2 = args[1];
-		fileName1 = "c:/users/mert/desktop/paragraph1.txt";
-		fileName2 = "c:/users/mert/desktop/paragraph2.txt";
+		fileName1 = args[0];
+		fileName2 = args[1];
 		splitSentence(fileReader1, fileName1, bufferedReader1, sentence1);
 		splitWords(sentence1);
 		System.out.println(
@@ -84,9 +79,7 @@ public class Detector {
 		return 0;
 	}
 
-	public static double getWordComplexity(double x) { // returns a value
-														// between 0 and 1. 1 =
-														// basic, 0 = complex
+	public static double getWordComplexity(double x) { // returns a value between 0 and 1. 1 = basic, 0 = complex
 		return x / theWordCount;
 	}
 
