@@ -8,49 +8,105 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javafx.util.Pair;
+
+@SuppressWarnings("unused")
 public class Detector {
 
-	public static List<String> totalWords = new ArrayList<String>();
+	
+	public static List<String> paragraphs = new ArrayList<String>();
+	public static List<String[]> sentences = new ArrayList<String[]>();
 	public static String[] words = null;
-	public static int wordCountPerSentence = 0;
-	public static String fileName1 = ""; // insert a fileName here
-	public static String fileName2 = ""; // and here to get statistics on both
-	public static FileReader fileReader1 = null;
-	public static FileReader fileReader2 = null;
-	public static BufferedReader bufferedReader1 = null;
-	public static BufferedReader bufferedReader2 = null;
+	
 
-	public static String[] sentence1 = null;
-	public static String[] sentence2 = null;
+	public static List<String> totalWords = new ArrayList<String>();
+	public static int wordCountPerSentence = 0;
+	
+	
+	public static String fileName = ""; // insert a fileName here
+	public static FileReader fileReader = null;
+	public static BufferedReader bufferedReader = null;
+
 
 	public static double engUSWordCount = 155000000000.0; // 155 billion
 	public static double theWordCount = 16977752813.0; // 16.9 billion
 
-	public static void main(String[] args) {
+	public static double mult = 9.17; //155 divided by 16.9
+	
 
-		if (args.length > 2) {
+	public static List<Pair<Integer,Integer>> combinations = new ArrayList<Pair<Integer,Integer>>(); 
+	
+	public static void main(String[] args) {
+		
+
+		if (args.length > 1) {
 			System.out.println("Too many arguments!");
 		}
-		fileName1 = args[0];
-		fileName2 = args[1];
-		splitSentence(fileReader1, fileName1, bufferedReader1, sentence1);
-		splitWords(sentence1);
-		System.out.println(
-				"First file has " + getUniqueWordCount(sentence1) + " unique words. On average, this writer had "
-						+ getAverageWordCountPerSentence(sentence1) + " words per sentence.");
-		System.out.println("Unique word complexity of file 1: " + getAverageWordComplexity(sentence1));
-		totalWords.clear();
-
-		splitSentence(fileReader2, fileName2, bufferedReader2, sentence2);
-		splitWords(sentence2);
-		System.out.println(
-				"Second file has " + getUniqueWordCount(sentence2) + " unique words. On average, this writer had "
-						+ getAverageWordCountPerSentence(sentence2) + " words per sentence.");
-		System.out.println("Unique word complexity of file 2: " + getAverageWordComplexity(sentence2));
-		totalWords.clear();
+		// fileName1 = args[0]; normally this is how we use it, but I wanted to test it out with a .txt file of my own.
+		
+		
+		fileName = "c:/users/mert/desktop/essay.txt"; 
+		splitParagraph(fileReader, fileName, bufferedReader);
+		System.out.println(paragraphs.size() + " paragraphs detected.");
+		System.out.println(getCombination(paragraphs.size(),2) + " possible paragraph combinations found.");
+		
+		/*
+		 * Figuring out possible paragraph combinations
+		 * and removing if there is the same combination with their pairs reversed
+		 */
+		
+		int counter = 0;
+		for (int i = 0; i < paragraphs.size(); i++){
+			for (int j = 0; j < paragraphs.size(); j++){
+				if (i == j){
+					continue;
+				}
+				else{
+					Pair<Integer, Integer> pair = new Pair<Integer, Integer>(i,j);
+					combinations.add(pair);
+					counter++;              
+				}
+			}
+		}
+		
+		for (int i = 0; i < combinations.size(); i++){
+			int firstInt = combinations.get(i).getKey();
+			int secondInt = combinations.get(i).getValue();
+			for (int j = 0; j < combinations.size(); j++){
+				if (firstInt == combinations.get(j).getValue() && secondInt == combinations.get(j).getKey()){
+					combinations.remove(j);
+				}
+			}
+		}
+		
+		for (int i = 0; i < combinations.size(); i++){
+			System.out.println(combinations.get(i).getKey() + " " +combinations.get(i).getValue());
+		}
+		
+		
+		for (int i = 0; i < paragraphs.size(); i++){
+			if (counter > getCombination(paragraphs.size(),2)){
+				break;
+			}
+		}
+		for (int i = 0; i < paragraphs.size(); i++){
+			splitSentence(paragraphs, i);
+			splitWords(sentences.get(i));
+			
+			System.out.println(
+					"Paragraph number: " + (i+1) + " has " + getUniqueWordCount(sentences.get(i)) + " unique words. On average, this paragraph had "
+							+ getAverageWordCountPerSentence(sentences.get(i)) + " words per sentence.");
+			System.out.println("Unique word complexity of paragraph number: " + (i+1) + " is " + getAverageWordComplexity(sentences.get(i)));
+			totalWords.clear();
+			wordCountPerSentence = 0;
+		}
+		
 	}
+
 
 	public static String getHTML(String urlToRead, String query) throws Exception {
 		StringBuilder result = new StringBuilder();
@@ -79,12 +135,15 @@ public class Detector {
 		return 0;
 	}
 
-	public static double getWordComplexity(double x) { // returns a value between 0 and 1. 1 = basic, 0 = complex
+	public static double getWordComplexity(double x) { // returns a value
+														// between 0 and 1. 1 =
+														// basic, 0 = complex
 		return x / theWordCount;
 	}
 
-	public static void splitSentence(FileReader fReader, String fileName, BufferedReader bReader, String[] paragraph) {
-
+	public static void splitParagraph(FileReader fReader, String fileName, BufferedReader bReader){
+		
+		String[] paragraph;
 		try {
 			fReader = new FileReader(fileName);
 			bReader = new BufferedReader(fReader);
@@ -94,17 +153,22 @@ public class Detector {
 			 */
 
 			String line = null;
-			while ((line = bReader.readLine()) != null) {
-				paragraph = line.split("\\.");
-				sentence1 = paragraph;
-				sentence2 = paragraph;
+			while ((line = bReader.readLine()) != null) {			
+				paragraphs.add(line);
 			}
-
-		} catch (FileNotFoundException ex) {
+			
+	}	catch (FileNotFoundException ex) {
 			ex.printStackTrace();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public static void splitSentence(List<String> paragraph, int i) {
+		String[] sentences;
+		String[] toStringArray = paragraph.toArray(new String[0]);
+		sentences = toStringArray[i].split("\\.");
+		Detector.sentences.add(sentences);
 	}
 
 	public static void splitWords(String[] paragraph) {
@@ -154,7 +218,8 @@ public class Detector {
 				uniqueWords.add(totalWords.get(i));
 			}
 		}
-		return uniqueWords.size();
+		
+		return uniqueWords.size()-1;
 	}
 
 	public static double getAverageWordCountPerSentence(String[] paragraph) {
@@ -170,4 +235,21 @@ public class Detector {
 		}
 		return sb.toString();
 	}
+	
+	
+	public static int factorial(int x){
+	    int result;
+
+	   if(x==1)
+	     return 1;
+
+	   result = factorial(x-1) * x;
+	   return result;
 }
+
+public static int getCombination(int n, int r){
+	return factorial(n) / (factorial(r) * factorial(n-r)); //get possible combinations of an essay
+}
+}
+
+
