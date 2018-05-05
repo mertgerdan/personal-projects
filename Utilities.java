@@ -38,15 +38,15 @@ public class Utilities {
 	}
 	
 	
-	public static String cleanTheWord(String word){
-		StringBuilder sb = new StringBuilder(word);
-		for (int i = 0; i < word.length(); i++){
-			if (sb.charAt(i) == ',' || sb.charAt(i) == '\''){
-				sb.deleteCharAt(i);
-			}
-		}
-		return sb.toString();
-	}
+ 	public static String cleanTheWord(String word){
+        String cleanWord = word;
+  		for (int i = 0; i < word.length(); i++){
+  			if (word.charAt(i) == ',' || word.charAt(i) == '\''){
+                cleanWord = word.substring(0,i);
+  			}
+  		}
+  		return cleanWord;
+  	}
 	
     private static int binarySearch(int arr[], int l, int r, int x){
         if (r>=l){
