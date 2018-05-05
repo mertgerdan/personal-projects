@@ -31,6 +31,7 @@ public class Detector extends Utilities{
 		
 		public static void main(String[] args) {
 			
+			System.out.println("This file's ID is set as: " + generateNewID());
 
 			if (args.length > 1) {
 				System.out.println("Too many arguments!");
@@ -105,8 +106,9 @@ public class Detector extends Utilities{
 				 */
 
 				String line = null;
+				int counter = 0;
 				while ((line = bReader.readLine()) != null) {
-					Paragraph paragraph = new Paragraph(generateNewID(), line);
+					Paragraph paragraph = new Paragraph(counter, line);
 					paragraphs.add(paragraph);
 				}
 				
