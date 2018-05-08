@@ -41,7 +41,7 @@ public class Utilities {
  	public static String cleanTheWord(String word){
         String cleanWord = word;
   		for (int i = 0; i < word.length(); i++){
-  			if (word.charAt(i) == ',' || word.charAt(i) == '\''){
+  			if (word.charAt(i) == ',' || word.charAt(i) == ';'){
                 cleanWord = word.substring(0,i);
   			}
   		}
