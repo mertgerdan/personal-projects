@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import hisarai.plagiarism.detector.SQL.StatRow;
 import javafx.util.Pair;
 
 @SuppressWarnings("unused")
@@ -25,13 +29,18 @@ public class Detector extends Utilities{
 		public static String fileName = ""; // insert a fileName here
 		public static FileReader fileReader = null;
 		public static BufferedReader bufferedReader = null;
+		public static String connectionString = "jdbc:sqlserver://hisarsqlsrv1.database.windows.net:1433;database=TEXT_STATS;user=hisarsql@hisarsqlsrv1;password=Hisarpw1234;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";   
+		public static Connection connection = null;
+		public static ResultSet resultSet = null;  
 
 
 		public static List<Pair<Integer,Integer>> combinations = new ArrayList<Pair<Integer,Integer>>(); 
 		
 		public static void main(String[] args) {
 			
-			System.out.println("This file's ID is set as: " + generateNewID());
+			int fileID = generateNewID();
+			System.out.println("This file's ID is set as: " + fileID);
+			
 
 			if (args.length > 1) {
 				System.out.println("Too many arguments!");
@@ -39,10 +48,11 @@ public class Detector extends Utilities{
 			// fileName = args[0];
 			
 			
-			fileName = "/Users/macbook/Desktop/paragraph1.txt"; 
+			fileName = "C:/Users/Mert/Desktop/essay.txt"; 
 			splitParagraph(fileReader, fileName, bufferedReader);
 			System.out.println(paragraphs.size() + " paragraphs detected.");
 			System.out.println(getCombination(paragraphs.size(),2) + " possible paragraph combinations found.");
+			
 			
 			/*
 			 * Figuring out possible paragraph combinations
@@ -106,7 +116,7 @@ public class Detector extends Utilities{
 			}
 			
 			
-			/*for (int i = 0; i < paragraphs.size(); i++){
+			for (int i = 0; i < paragraphs.size(); i++){
 				Paragraph p = paragraphs.get(i);
 				p.splitSentence();
 				p.splitWords();
@@ -114,11 +124,24 @@ public class Detector extends Utilities{
 				p.setAverageWordCountPerSentence();
 				p.setUWCPX();
 				
-				System.out.println(
-						"Paragraph number: " + (i+1) + " has " + p.getUWC() + " unique words. On average, this paragraph had "
-								+ p.getWPS() + " words per sentence.");
-				System.out.println("Unique word complexity of paragraph number: " + (i+1) + " is " + p.getUWCPX());
-			}*/
+				try 
+		        {  
+		        	 connection = DriverManager.getConnection(connectionString); 
+		        	 SQL.insertStatRow(connection, new StatRow(fileID, p.getWPS(), p.getUWC(), p.getUWCPX(), true, p.getUID()));
+		             
+		         }  
+		         catch (Exception e) 
+		         {  
+		             e.printStackTrace();  
+		         }  
+		         finally 
+		         {  
+		        	 if (resultSet != null) try { resultSet.close(); } catch(Exception e) {}
+		             if (connection != null) try { connection.close(); } catch(Exception e) {} 
+		         }
+				
+				
+			}
 			
 		}
 
@@ -138,6 +161,7 @@ public class Detector extends Utilities{
 				while ((line = bReader.readLine()) != null) {
 					Paragraph paragraph = new Paragraph(counter, line);
 					paragraphs.add(paragraph);
+					counter++;
 				}
 				
 		}	catch (FileNotFoundException ex) {
@@ -155,4 +179,4 @@ public class Detector extends Utilities{
 		
 		
 
-	}
+}
