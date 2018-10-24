@@ -11,6 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+/*
+* Mert Gerdan Compound Interest Calculator
+* 01/2017?
+*/
+
 public class CompoundInterest extends JPanel implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
 
@@ -101,13 +106,13 @@ public class CompoundInterest extends JPanel implements PropertyChangeListener {
 
 	}
 
-	// brand new function
+	
 	public static double CompInterest(double starting, double year, double cRate, double compTypeYear) {
-		double amount = starting * Math.pow((1 + ((cRate/100)/compTypeYear)),compTypeYear*year);
+		double amount = starting * Math.pow((1 + ((cRate/100)/compTypeYear)),compTypeYear*year); //(1+(1/x))^xt
 		return amount;
 	}
 	
-	//same func from v1
+	
 	public static double InflationCalc(double money, double year, double iRate) { // same
 		money -= money / 100 * iRate;
 		int b = 1;
@@ -146,7 +151,6 @@ public class CompoundInterest extends JPanel implements PropertyChangeListener {
 		finalValueField.setValue(new Double(final1));
 	}
 	
-	// this IS the main main method (dunno why my class is named Main)
 	public static void main(String args[]) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
