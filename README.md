@@ -1,2 +1,2 @@
 # personal-projects
-This is a Minesweeper clone written in Java using the JavaFX library. Pretty neat'o!
+This one was very basic, but I found it on my computer, and decided to upload it. This probably dates back to January 2017 or so.
