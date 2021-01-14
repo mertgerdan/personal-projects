@@ -1,2 +1,4 @@
 # personal-projects
-This one was very basic, but I found it on my computer, and decided to upload it. This probably dates back to January 2017 or so.
+## Compound Interest and Inflation Calculator
+This was a very simple project I did back in 2017-2018, it uses JavaFX to create an interactive compound interest calculator.
+To setup JavaFX, simply follow the instructions at https://openjfx.io/openjfx-docs/#install-javafx.
