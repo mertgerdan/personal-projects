@@ -3,6 +3,7 @@ This is a Minesweeper clone written in Java in 2018 using the JavaFX library.
 
 ## **Setup (for Linux/Mac)**
 Make sure to install JavaFX by following the instructions on the link https://gluonhq.com/products/javafx/.
+
 ```export PATH_TO_FX=path/to/javafx-sdk-<current-version>/lib```
 Compile the java file with these flags: ```javac --module-path $PATH_TO_FX --add-modules javafx.controls Minesweeper.java```
 Run the program with: ```java --module-path $PATH_TO_FX --add-modules javafx.controls Minesweeper```
