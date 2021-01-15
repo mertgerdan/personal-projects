@@ -12,4 +12,9 @@ Refer to https://openjfx.io/openjfx-docs/#install-javafx for installation issues
 - Width & height. This is how large the window, and therefore the minefield will be, in terms of pixels. Recommended values are between 400-600 for each. This depends on your screen resolution.
 - Mine count. This controls how many mines'll be present in our field. Divide your width and height by the square size and multiply them together to see how many squares you'll have in total. Easy: 10% of the total square count. Medium: 25% of the total square count. Hard: 40+% of the total square count.
 
+## Controls
+It's the same as the original minesweeper. Left click to reveal the contents of a tile, right click to place a flag over it.
+The timer, the restart button and the flag counter are all located at the bottom of the screen.
+After every game, your win percentage gets updated accordingly.
+
 Enjoy!
