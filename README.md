@@ -1,2 +1,2 @@
 # personal-projects
-Welcome, and enjoy these silly projects :)
+Welcome, check out different projects in their respective branch. :)
