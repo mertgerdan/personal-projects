@@ -8,7 +8,6 @@ The main problem with plagiarism is that if someone is determined enough to plag
 - Words per sentence
 - Unique word count
 - Unique word complexity (How "sophisticated" a given word in a sentence is, we had a basic formula to find the sophistication of a word.)
-There were plans to add more parameters to our program since it showed promise, but we received 4th place instead of the top 3 to advance to regional finals, and motivation in the team slumped because of that.
 
 ## Setup
 Setup is very straightforward as it only was a console application which was a prototype in our pitch. Nothing other than the JDK is required to run this program.
